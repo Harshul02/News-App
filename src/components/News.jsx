@@ -44,8 +44,18 @@ export class News extends Component {
         <h2>My News - Top Headlines</h2>
         <div className="row">
         {articles.map((element)=>{
+          let desc = element.description;
+          let shortTitle = element.title;
+          if(desc && desc.length >60)
+          {
+            desc=desc.slice(0,60);
+          }
+          if(shortTitle && shortTitle.length>45)
+          {
+            shortTitle = shortTitle.slice(0,45);
+          }
         return( <div className="col-md-4" key={element.url}>
-            <NewsItem title={element.title.length >= 45 ? element.title.slice(0, 45) : element.title} description={element.description} imageUrl={element.urlToImage} newsUrl={element.url} />
+            <NewsItem title={shortTitle} description={desc} imageUrl={element.urlToImage} newsUrl={element.url} />
           </div>);
         })}
           
