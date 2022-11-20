@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import secret from './API.js';
+import { Spinner } from './Spinner';
 
 export class News extends Component {
   
@@ -15,7 +16,7 @@ export class News extends Component {
   }
 
   componentDidMount(){
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=1&pageSize=20`;
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=1&pageSize=${this.props.pageSize}`;
     // let data = await fetch(url);
     fetch(url)
     .then((res) => res.json())
@@ -27,22 +28,14 @@ export class News extends Component {
       });
       console.log(json.articles);
   });
-    // let parsedData = await data.json();
-    // console.log(parsedData.articles);
-    // this.setState={
-    //   articles: parsedData.articles,
-    //   // loading: true
-    // }
+    
   }
 
   handleNextClick = ()=> {
     // console.log("Next");
-    if(this.state.page + 1 > Math.ceil(this.state.totalResults /20))
+    if(!(this.state.page + 1 > Math.ceil(this.state.totalResults /this.props.pageSize)))
     {
-
-    }
-    else{
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=${this.state.page + 1}&pageSize=20`;
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     // let data = await fetch(url);
     fetch(url)
     .then((res) => res.json())
@@ -54,13 +47,10 @@ export class News extends Component {
       })});
 
     }
-    // this.setState = {
-    //   page: this.state.page + 1
-    // }
   }
   handlePrevClick = ()=> {
     console.log("Previous");
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=${this.state.page - 1}&pageSize=20`;
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${secret}&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
     // let data = await fetch(url);
     fetch(url)
     .then((res) => res.json())
@@ -76,23 +66,16 @@ export class News extends Component {
     const { loading, articles } = this.state;
     // console.log(articles);
         if (!loading) return <div>
-            <h3> Loading please wait.... </h3> </div> ;
+            <h3><Spinner /> Loading please wait.... </h3> </div> ;
     // const {articles,loading} = this.state;
     return (
       <div className="container my-3">
-        <h2>My News - Top Headlines</h2>
+      <h1 className="text-center">My News - Top Headlines</h1>
         <div className="row">
         {articles.map((element)=>{
           let desc = element.description;
           let shortTitle = element.title;
-          {/* if(desc && desc.length >60)
-          {
-            desc=desc.slice(0,60);
-          }
-          if(shortTitle && shortTitle.length>45)
-          {
-            shortTitle = shortTitle.slice(0,45);
-          } */}
+          
         return( <div className="col-md-4" key={element.url}>
             <NewsItem title={shortTitle} description={desc} imageUrl={element.urlToImage} newsUrl={element.url} />
           </div>);
@@ -101,7 +84,7 @@ export class News extends Component {
         </div>
         <div className="container d-flex justify-content-between my-4">
         <button disabled={this.state.page<=1} type="button" className="btn btn-dark" onClick={this.handlePrevClick}>&larr; Previous</button>
-        <button type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &rarr;</button>
+        <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults /this.props.pageSize)} type="button" className="btn btn-dark" onClick={this.handleNextClick}>Next &rarr;</button>
         </div>
       </div>
     )
@@ -109,3 +92,23 @@ export class News extends Component {
 }
 
 export default News
+
+
+
+
+
+/* if(desc && desc.length >60)
+          {
+            desc=desc.slice(0,60);
+          }
+          if(shortTitle && shortTitle.length>45)
+          {
+            shortTitle = shortTitle.slice(0,45);
+          } */
+
+          // let parsedData = await data.json();
+    // console.log(parsedData.articles);
+    // this.setState={
+    //   articles: parsedData.articles,
+    //   // loading: true
+    // }
