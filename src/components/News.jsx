@@ -80,11 +80,11 @@ export class News extends Component {
     const { loading, articles } = this.state;
     // console.log(articles);
         if (!loading) return <div>
-            <h3><Spinner /> Loading please wait.... </h3> </div> ;
+            <h3 style={{marginTop: "50px"}}><Spinner /> Loading please wait.... </h3> </div> ;
     // const {articles,loading} = this.state;
     return (
       <div className="container my-3">
-      <h1 className="text-center">MyNews - Top Headlines</h1>
+      <h1 className="text-center" style={{marginTop: "90px"}}>MyNews - Top Headlines</h1>
         <div className="row">
         {articles.map((element)=>{
           let desc = element.description;
